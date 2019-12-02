@@ -1,0 +1,30 @@
+﻿<ContentControl x:Class="Simitone.Installer.UI.Controls.HeaderControl"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:Simitone.Installer.UI.Controls"
+             mc:Ignorable="d" Name="Host">
+    <ContentControl.Template>
+        <ControlTemplate TargetType="ContentControl">
+            <Border>
+                <Border.Background>
+                    <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                        <LinearGradientBrush.RelativeTransform>
+                            <TransformGroup>
+                                <ScaleTransform CenterY="0.5" CenterX="0.5"/>
+                                <SkewTransform CenterY="0.5" CenterX="0.5"/>
+                                <RotateTransform Angle="90" CenterY="0.5" CenterX="0.5"/>
+                                <TranslateTransform/>
+                            </TransformGroup>
+                        </LinearGradientBrush.RelativeTransform>
+                        <GradientStop Color="#000097FF" Offset="0"/>
+                        <GradientStop Color="#FF00E673" Offset="1"/>
+                    </LinearGradientBrush>
+                </Border.Background>
+                <TextBlock Margin="20,5" FontWeight="Bold" Foreground="Black" Text="{Binding Content, ElementName=Host}" FontSize="20" FontFamily="Trebuchet MS"/>
+            </Border>
+        </ControlTemplate>
+    </ContentControl.Template>
+    Hello World
+</ContentControl>

@@ -1,0 +1,22 @@
+﻿<TextBox x:Class="Simitone.Installer.UI.Controls.SimitoneTextbox"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:Simitone.Installer.UI.Controls"
+             mc:Ignorable="d" Foreground="#FF000051">
+    <TextBox.Template>
+        <ControlTemplate TargetType="TextBox">
+            <Border Padding="10,5" CornerRadius="7">
+                <Border.Background>
+                    <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                        <GradientStop Color="#FFB2D5FF" Offset="1"/>
+                        <GradientStop Color="White" Offset="0.247"/>
+                    </LinearGradientBrush>
+                </Border.Background>
+                <TextBox x:Name="BaseTextBox" Background="{x:Null}" BorderBrush="{x:Null}" Foreground="{TemplateBinding Foreground}" FontFamily="Trebuchet MS" Text="{Binding Text, RelativeSource={RelativeSource TemplatedParent}, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" FontSize="16" FontWeight="Bold" TextChanged="TextBox_TextChanged"/>
+            </Border>
+        </ControlTemplate>
+    </TextBox.Template>
+    Default Text!!!
+</TextBox>

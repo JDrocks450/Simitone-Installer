@@ -1,0 +1,114 @@
+﻿<Page x:Class="Simitone.Installer.UI.Pages.TransferPageCore"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+      xmlns:local="clr-namespace:Simitone.Installer.UI.Pages"
+      xmlns:controls="clr-namespace:Simitone.Installer.UI.Controls"
+      mc:Ignorable="d" 
+      d:DesignHeight="450" d:DesignWidth="800"
+      Title="TransferPageCore" Foreground="White" Name="Host">
+    <DockPanel>
+        <DockPanel.Resources>
+            <Style TargetType="TextBlock">
+                <Setter Property="FontSize" Value="18"/>
+                <Setter Property="FontFamily" Value="Trebuchet MS"/>
+            </Style>
+        </DockPanel.Resources>
+        <controls:HeaderControl VerticalAlignment="Top" Margin="0,15,300,0" DockPanel.Dock="Top">Transfer The Sims Installation</controls:HeaderControl>
+        <Grid DockPanel.Dock="Top" Margin="10,10">
+
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="283*"/>
+                <ColumnDefinition Width="497*"/>
+            </Grid.ColumnDefinitions>
+            <DockPanel Margin="10,0">
+                <TextBlock VerticalAlignment="Center" Margin="0,0,5,0">IP Address:</TextBlock>
+                <controls:SimitoneTextbox Text="{Binding URL, ElementName=Host}"/>
+            </DockPanel>
+            <DockPanel Margin="10,0" Grid.Column="1">
+                <TextBlock VerticalAlignment="Center" Margin="0,0,5,0">Installation Path:</TextBlock>
+                <controls:DirectorySelector x:Name="DirectoryChooser"/>
+            </DockPanel>
+        </Grid>
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition/>
+                <ColumnDefinition/>
+            </Grid.ColumnDefinitions>
+            <DockPanel>
+                <controls:HeaderControl DockPanel.Dock="Top" Margin="0,10,0,0">Steps</controls:HeaderControl>
+                <StackPanel Margin="10">
+                    <Border Background="#72000000" Padding="10,0,0,0">
+                        <Grid Height="55">
+                            <TextBlock VerticalAlignment="Center">1.</TextBlock>
+                            <TextBlock FontWeight="Bold" Margin="30,5,0,0">Install Sims Game Files</TextBlock>
+                            <TextBlock Margin="30,0,0,5" VerticalAlignment="Bottom" Text="{Binding TS1Path, ElementName=Host}"/>
+                        </Grid>
+                    </Border>
+                    <Border Background="#72000000" Margin="0,5,0,0" Padding="10,0,0,0">
+                        <Grid Height="55">
+                            <TextBlock VerticalAlignment="Center" Text="2."/>
+                            <TextBlock FontWeight="Bold" Margin="30,5,0,0">Add Registry Keys</TextBlock>
+                            <TextBlock Margin="30,0,0,5" VerticalAlignment="Bottom"></TextBlock>
+                        </Grid>
+                    </Border>
+                </StackPanel>
+            </DockPanel>
+            <DockPanel Grid.Column="1">
+                <controls:HeaderControl DockPanel.Dock="Top" Margin="0,10,0,0">Console</controls:HeaderControl>
+                <StackPanel Orientation="Horizontal" DockPanel.Dock="Bottom" Margin="0,0,0,10">
+                    <Button x:Name="BackButton" Height="45" HorizontalAlignment="Left" VerticalAlignment="Bottom" Foreground="White" Click="BackButton_Click">
+                        <Button.Background>
+                            <RadialGradientBrush Center="0.5,-0.1" GradientOrigin="0.5,0.2" RadiusY="1.2" RadiusX="0.8">
+                                <RadialGradientBrush.RelativeTransform>
+                                    <TransformGroup>
+                                        <ScaleTransform CenterY="0.5" CenterX="0.5"/>
+                                        <SkewTransform CenterY="0.5" CenterX="0.5"/>
+                                        <RotateTransform CenterY="0.5" CenterX="0.5"/>
+                                        <TranslateTransform/>
+                                    </TransformGroup>
+                                </RadialGradientBrush.RelativeTransform>
+                                <GradientStop Color="#FF59D9FF"/>
+                                <GradientStop Color="#FF006E8F" Offset="1"/>
+                            </RadialGradientBrush>
+                        </Button.Background> Back</Button>
+                    <Button x:Name="PauseButton" Height="45" HorizontalAlignment="Left" VerticalAlignment="Bottom" Margin="5,0,0,0" Foreground="White" Click="PauseButton_Click">
+                        <Button.Background>
+                            <RadialGradientBrush Center="0.5,-0.1" GradientOrigin="0.5,0.2" RadiusY="1.2" RadiusX="0.8">
+                                <RadialGradientBrush.RelativeTransform>
+                                    <TransformGroup>
+                                        <ScaleTransform CenterY="0.5" CenterX="0.5"/>
+                                        <SkewTransform CenterY="0.5" CenterX="0.5"/>
+                                        <RotateTransform CenterY="0.5" CenterX="0.5"/>
+                                        <TranslateTransform/>
+                                    </TransformGroup>
+                                </RadialGradientBrush.RelativeTransform>
+                                <GradientStop Color="#FF59D9FF"/>
+                                <GradientStop Color="#FF006E8F" Offset="1"/>
+                            </RadialGradientBrush>
+                        </Button.Background> Pause</Button>
+                    <Button x:Name="BeginButton" Height="45" HorizontalAlignment="Left" VerticalAlignment="Bottom" Margin="5,0,0,0" Click="BeginButton_Click" Foreground="White">
+                        <Button.Background>
+                            <RadialGradientBrush Center="0.5,-0.1" GradientOrigin="0.5,0.2" RadiusY="1.2" RadiusX="0.8">
+                                <RadialGradientBrush.RelativeTransform>
+                                    <TransformGroup>
+                                        <ScaleTransform CenterY="0.5" CenterX="0.5"/>
+                                        <SkewTransform CenterY="0.5" CenterX="0.5"/>
+                                        <RotateTransform CenterY="0.5" CenterX="0.5"/>
+                                        <TranslateTransform/>
+                                    </TransformGroup>
+                                </RadialGradientBrush.RelativeTransform>
+                                <GradientStop Color="#FF5CDAFF"/>
+                                <GradientStop Color="#FF00AA5D" Offset="0.892"/>
+                            </RadialGradientBrush>
+                        </Button.Background> Start</Button>
+                </StackPanel>
+                <ScrollViewer x:Name="ConsoleViewer" Margin="10" DockPanel.Dock="Top">
+                    <TextBox x:Name="ConsoleOut" Background="#FF1F1F1F" BorderBrush="#FF595959" Foreground="White" FontFamily="Consolas" />
+
+                </ScrollViewer>
+            </DockPanel>
+        </Grid>
+    </DockPanel>
+</Page>

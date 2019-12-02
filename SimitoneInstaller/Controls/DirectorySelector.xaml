@@ -1,0 +1,12 @@
+﻿<UserControl x:Class="Simitone.Installer.UI.Controls.DirectorySelector"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:Simitone.Installer.UI.Controls"
+             mc:Ignorable="d" Name="Host">
+    <DockPanel>
+        <local:SimitoneSquareButton Margin="5,0,0,0" Width="105" Click="Button_Click" DockPanel.Dock="Right">Browse</local:SimitoneSquareButton>
+        <local:SimitoneTextbox Text="{Binding SelectedDirectory, ElementName=Host}" DockPanel.Dock="Left"/>
+    </DockPanel>
+</UserControl>

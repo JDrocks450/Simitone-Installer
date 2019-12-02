@@ -1,0 +1,99 @@
+﻿<Page x:Class="Simitone.Installer.UI.Pages.SimitoneInstallationPage"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+      xmlns:local="clr-namespace:Simitone.Installer.UI.Pages"
+      xmlns:controls="clr-namespace:Simitone.Installer.UI.Controls"
+      mc:Ignorable="d" 
+      d:DesignHeight="450" d:DesignWidth="400" Loaded="Host_Loaded"
+      Title="SimitoneInstallationPage" Foreground="White" Name="Host">
+    <Page.Resources>
+        <Style TargetType="TextBlock">
+            <Setter Property="FontFamily" Value="Trebuchet MS"/>
+            <Setter Property="FontSize" Value="20"/>
+        </Style>
+    </Page.Resources>
+    <StackPanel>
+        <controls:HeaderControl Margin="0,10,0,10" VerticalAlignment="Top" DockPanel.Dock="Top">Simitone Setup</controls:HeaderControl>
+        <StackPanel Margin="20,0,10,10">
+            <TextBlock Margin="0,0,0,2" FontSize="16">The Sims Installation Directory:</TextBlock>
+            <controls:DirectorySelector x:Name="TS1PathBox" IsEnabled="False" Margin="0,0,0,10"/>
+            <TextBlock Margin="0,0,0,2" FontSize="16">Simitone Installation Directory:</TextBlock>
+            <controls:DirectorySelector x:Name="SimitonePathBox" Margin="0,0,0,10"/>
+            <TextBlock Margin="0,0,0,2" FontSize="16">Optional - Remesh Package:</TextBlock>
+            <controls:SimitoneSquareButton Margin="0,0,0,10">Install Package</controls:SimitoneSquareButton>
+            <TextBlock Margin="0,0,0,2" FontSize="16">Installed Expansion Packs:</TextBlock>
+            <UniformGrid Name="ExpansionDisplay" Rows="1" Height="30">
+                <UniformGrid.Resources>
+                    <Style TargetType="Border">
+                        <Setter Property="Background">
+                            <Setter.Value>
+                                <RadialGradientBrush Center="0.5,-0.1" GradientOrigin="0.5,0.2" RadiusY="1.2" RadiusX="0.8">
+                                    <RadialGradientBrush.RelativeTransform>
+                                        <TransformGroup>
+                                            <ScaleTransform CenterY="0.5" CenterX="0.5"/>
+                                            <SkewTransform CenterY="0.5" CenterX="0.5"/>
+                                            <RotateTransform CenterY="0.5" CenterX="0.5"/>
+                                            <TranslateTransform/>
+                                        </TransformGroup>
+                                    </RadialGradientBrush.RelativeTransform>
+                                    <GradientStop Color="White" Offset="0.57"/>
+                                    <GradientStop Color="#FF52B8FF" Offset="1"/>
+                                </RadialGradientBrush>
+                            </Setter.Value>
+                        </Setter>
+                        <Setter Property="CornerRadius" Value="5"/>
+                        <Setter Property="Width" Value="30"/>
+                    </Style>
+                </UniformGrid.Resources>
+                <Border/>
+                <Border/>
+                <Border/>
+                <Border/>
+                <Border/>
+                <Border/>
+                <Border/>
+                <Border/>
+            </UniformGrid>
+        </StackPanel>
+        <Grid DockPanel.Dock="Bottom" Height="100" Margin="0,0,0,10" HorizontalAlignment="Center">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="53*"/>
+                <ColumnDefinition Width="47*"/>
+            </Grid.ColumnDefinitions>
+            <Button Name="InstallButton" Click="InstallButton_Click" Margin="20,0,5,0" Foreground="White">
+                <Button.Background>
+                    <RadialGradientBrush Center="0.5,-0.1" GradientOrigin="0.5,0.2" RadiusY="1.2" RadiusX="0.8">
+                        <RadialGradientBrush.RelativeTransform>
+                            <TransformGroup>
+                                <ScaleTransform CenterY="0.5" CenterX="0.5"/>
+                                <SkewTransform CenterY="0.5" CenterX="0.5"/>
+                                <RotateTransform CenterY="0.5" CenterX="0.5"/>
+                                <TranslateTransform/>
+                            </TransformGroup>
+                        </RadialGradientBrush.RelativeTransform>
+                        <GradientStop Color="#FF01B9A9" Offset="1"/>
+                        <GradientStop Color="#FF00FF8B"/>
+                    </RadialGradientBrush>
+                </Button.Background>
+                Install
+            </Button>
+            <Button Name="QuitButton" Margin="5,0,20,0" Click="QuitButton_Click" Grid.Column="1" VerticalAlignment="Center" Foreground="White">
+                <Button.Background>
+                    <RadialGradientBrush Center="0.5,-0.1" GradientOrigin="0.5,0.2" RadiusY="1.2" RadiusX="0.8">
+                        <RadialGradientBrush.RelativeTransform>
+                            <TransformGroup>
+                                <ScaleTransform CenterY="0.5" CenterX="0.5"/>
+                                <SkewTransform CenterY="0.5" CenterX="0.5"/>
+                                <RotateTransform CenterY="0.5" CenterX="0.5"/>
+                                <TranslateTransform/>
+                            </TransformGroup>
+                        </RadialGradientBrush.RelativeTransform>
+                        <GradientStop Color="#FF207CFF"/>
+                        <GradientStop Color="#FF0041A0" Offset="1"/>
+                    </RadialGradientBrush>
+                </Button.Background> Skip</Button>
+        </Grid>
+    </StackPanel>
+</Page>

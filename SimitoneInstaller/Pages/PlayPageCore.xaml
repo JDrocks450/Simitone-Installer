@@ -1,0 +1,89 @@
+﻿<Page x:Class="Simitone.Installer.UI.Pages.PlayPageCore"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+      xmlns:local="clr-namespace:Simitone.Installer.UI.Pages"
+      mc:Ignorable="d" 
+      d:DesignHeight="450" d:DesignWidth="800"
+      Title="PlayPageCore">
+
+    <StackPanel VerticalAlignment="Center">
+        <Button x:Name="PlayButton" Height="85" Margin="0,0,0,10" Foreground="White" Click="PlayButton_Click">
+            <Button.Background>
+                <RadialGradientBrush Center="0.5,-0.1" GradientOrigin="0.5,0.2" RadiusY="1.2" RadiusX="0.8">
+                    <RadialGradientBrush.RelativeTransform>
+                        <TransformGroup>
+                            <ScaleTransform CenterY="0.5" CenterX="0.5"/>
+                            <SkewTransform CenterY="0.5" CenterX="0.5"/>
+                            <RotateTransform CenterY="0.5" CenterX="0.5"/>
+                            <TranslateTransform/>
+                        </TransformGroup>
+                    </RadialGradientBrush.RelativeTransform>
+                    <GradientStop Color="#FF01B9A9" Offset="1"/>
+                    <GradientStop Color="#FF00FF8B"/>
+                </RadialGradientBrush>
+            </Button.Background> Play</Button>
+        <Button x:Name="Update" Height="55" Margin="0,0,0,10" Foreground="White" Click="Update_Click">
+            <Button.Background>
+                <RadialGradientBrush Center="0.5,-0.1" GradientOrigin="0.5,0.2" RadiusY="1.2" RadiusX="0.8">
+                    <RadialGradientBrush.RelativeTransform>
+                        <TransformGroup>
+                            <ScaleTransform CenterY="0.5" CenterX="0.5"/>
+                            <SkewTransform CenterY="0.5" CenterX="0.5"/>
+                            <RotateTransform CenterY="0.5" CenterX="0.5"/>
+                            <TranslateTransform/>
+                        </TransformGroup>
+                    </RadialGradientBrush.RelativeTransform>
+                    <GradientStop Color="#FF207CFF"/>
+                    <GradientStop Color="#FF0041A0" Offset="1"/>
+                </RadialGradientBrush>
+            </Button.Background> Force Update</Button>
+        <Button x:Name="TransferButton" Height="55" Margin="0,0,0,10" Foreground="White" Click="TransferButton_Click" Content="Transfer Installation">
+            <Button.Background>
+                <RadialGradientBrush Center="0.5,-0.1" GradientOrigin="0.5,0.2" RadiusY="1.2" RadiusX="0.8">
+                    <RadialGradientBrush.RelativeTransform>
+                        <TransformGroup>
+                            <ScaleTransform CenterY="0.5" CenterX="0.5"/>
+                            <SkewTransform CenterY="0.5" CenterX="0.5"/>
+                            <RotateTransform CenterY="0.5" CenterX="0.5"/>
+                            <TranslateTransform/>
+                        </TransformGroup>
+                    </RadialGradientBrush.RelativeTransform>
+                    <GradientStop Color="#FFFFCE79"/>
+                    <GradientStop Color="#FFAC6D00" Offset="1"/>
+                </RadialGradientBrush>
+            </Button.Background>
+        </Button>
+        <Button x:Name="GitHubButton" Height="55" Margin="0,0,0,10" Foreground="#FF323232" Click="GitHubButton_Click">
+            <Button.Background>
+                <RadialGradientBrush Center="0.5,-0.1" GradientOrigin="0.5,0.2" RadiusY="1.2" RadiusX="0.8">
+                    <RadialGradientBrush.RelativeTransform>
+                        <TransformGroup>
+                            <ScaleTransform CenterY="0.5" CenterX="0.5"/>
+                            <SkewTransform CenterY="0.5" CenterX="0.5"/>
+                            <RotateTransform CenterY="0.5" CenterX="0.5"/>
+                            <TranslateTransform/>
+                        </TransformGroup>
+                    </RadialGradientBrush.RelativeTransform>
+                    <GradientStop Color="White" Offset="0.57"/>
+                    <GradientStop Color="Gray" Offset="1"/>
+                </RadialGradientBrush>
+            </Button.Background> Open GitHub</Button>
+        <Button x:Name="CloseButton" Height="55" Margin="0,0,0,10" Foreground="White" Click="CloseButton_Click">
+            <Button.Background>
+                <RadialGradientBrush Center="0.5,-0.1" GradientOrigin="0.5,0.2" RadiusY="1.2" RadiusX="0.8">
+                    <RadialGradientBrush.RelativeTransform>
+                        <TransformGroup>
+                            <ScaleTransform CenterY="0.5" CenterX="0.5"/>
+                            <SkewTransform CenterY="0.5" CenterX="0.5"/>
+                            <RotateTransform CenterY="0.5" CenterX="0.5"/>
+                            <TranslateTransform/>
+                        </TransformGroup>
+                    </RadialGradientBrush.RelativeTransform>
+                    <GradientStop Color="Gray"/>
+                    <GradientStop Color="#FF4F4F4F" Offset="1"/>
+                </RadialGradientBrush>
+            </Button.Background> Close</Button>
+    </StackPanel>
+</Page>

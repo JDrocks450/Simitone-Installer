@@ -1,0 +1,15 @@
+﻿<?xml version='1.0' encoding='utf-8'?>
+<SettingsFile xmlns="http://schemas.microsoft.com/VisualStudio/2004/01/settings" CurrentProfile="(Default)" GeneratedClassNamespace="Simitone.Installer.Driver.Properties" GeneratedClassName="Constants">
+  <Profiles />
+  <Settings>
+    <Setting Name="GitUser" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">riperiperi</Value>
+    </Setting>
+    <Setting Name="GitRepoName" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">Simitone</Value>
+    </Setting>
+    <Setting Name="GitRepoAddress" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">https://github.com/riperiperi/Simitone</Value>
+    </Setting>
+  </Settings>
+</SettingsFile>

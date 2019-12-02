@@ -1,0 +1,91 @@
+﻿<Page x:Class="Simitone.Installer.UI.Pages.PlayPage"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+      xmlns:local="clr-namespace:Simitone.Installer.UI.Pages"
+      xmlns:controls="clr-namespace:Simitone.Installer.UI.Controls"
+      xmlns:sys="clr-namespace:System;assembly=mscorlib"
+      mc:Ignorable="d" 
+      d:DesignHeight="450" d:DesignWidth="800" Name="Host"
+      Title="PlayPage" Loaded="Page_Loaded" Foreground="White" ClipToBounds="True">
+
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="440"/>
+            <ColumnDefinition/>
+        </Grid.ColumnDefinitions>
+        <Image Source="pack://siteoforigin:,,,/Resources/play2.png" Grid.ColumnSpan="2" Stretch="UniformToFill"/>
+        <Rectangle x:Name="BackgroundBlocker" Grid.ColumnSpan="2">
+            <Rectangle.Fill>
+                <LinearGradientBrush EndPoint="1,0.5" StartPoint="0,0.5">
+                    <GradientStop Color="#9967BAFF" Offset="0.33"/>
+                    <GradientStop Color="#9900FF80" Offset="0.063"/>
+                    <GradientStop Color="#0067BAFF" Offset="0.994"/>
+                </LinearGradientBrush>
+            </Rectangle.Fill>
+        </Rectangle>
+        <Image Grid.ColumnSpan="2" Source="pack://siteoforigin:,,,/Resources/diamond.png" Margin="0" Opacity=".5" HorizontalAlignment="Left" />
+        <controls:Flyout x:Name="PlayPageFlyout">
+            <controls:Flyout.Content>
+                <local:PlayPageCore/>
+            </controls:Flyout.Content>
+        </controls:Flyout>
+        <controls:Flyout Visibility="Hidden" Grid.Column="1" RenderTransformOrigin="0.5,0.5" Margin="0,-25">
+            <controls:Flyout.RenderTransform>
+                <TransformGroup>
+                    <ScaleTransform ScaleY="1" ScaleX="-1"/>
+                    <SkewTransform AngleY="0" AngleX="0"/>
+                    <RotateTransform Angle="0"/>
+                    <TranslateTransform/>
+                </TransformGroup>
+            </controls:Flyout.RenderTransform>
+        </controls:Flyout>
+        <Border Visibility="Hidden" Grid.Column="1" Margin="50,10,0,10" CornerRadius="10">
+            <DockPanel>
+                <Border Margin="0,20,0,10" DockPanel.Dock="Top" Padding="10,5">
+                    <Border.Background>
+                        <LinearGradientBrush>
+                            <GradientStop Color="#0000FF5D" Offset="0"/>
+                            <GradientStop Color="#FF00FFAE" Offset="0.5"/>
+                            <GradientStop Color="#0000A2FF" Offset="1"/>
+                        </LinearGradientBrush>
+                    </Border.Background>
+                    <TextBlock FontSize="24" FontWeight="Bold" Foreground="Black" HorizontalAlignment="Center">Simitone Options</TextBlock>
+                </Border>
+                <StackPanel Margin="10,0" DockPanel.Dock="Top">
+                    <CheckBox FontFamily="Trebuchet MS" FontWeight="Bold" Foreground="White" VerticalContentAlignment="Center" Background="#FF2E2E2E" BorderBrush="#FF818181" FontSize="16" IsChecked="{Binding Using3D, ElementName=Host}">3D Enabled</CheckBox>
+                    <CheckBox FontFamily="Trebuchet MS" FontWeight="Bold" Foreground="White" VerticalContentAlignment="Center" Background="#FF2E2E2E" BorderBrush="#FF818181" FontSize="16" IsChecked="{Binding IDE, ElementName=Host}">IDE Enabled</CheckBox>
+                    <TextBlock FontFamily="Trebuchet MS" FontWeight="Bold" Foreground="White" FontSize="16">Graphics API:</TextBlock>
+                    <ComboBox BorderBrush="#FF898989" SelectedItem="{Binding API, ElementName=Host}">
+                        <ComboBox.Background>
+                            <LinearGradientBrush EndPoint="0,1" StartPoint="0,0">
+                                <GradientStop Color="#FF292929" Offset="0"/>
+                                <GradientStop Color="#FF747474" Offset="1"/>
+                            </LinearGradientBrush>
+                        </ComboBox.Background>
+                        <ComboBox.ItemsSource>
+                            <x:Array Type="{x:Type sys:String}">
+                                <sys:String>DirectX</sys:String>
+                                <sys:String>OpenGL</sys:String>
+                            </x:Array>
+                        </ComboBox.ItemsSource>
+                    </ComboBox>
+                    <CheckBox FontFamily="Trebuchet MS" FontWeight="Bold" Foreground="White" VerticalContentAlignment="Center" Background="#FF2E2E2E" BorderBrush="#FF818181" FontSize="16" IsChecked="{Binding MinimizeOnPlay, ElementName=Host}" Margin="0,10,0,0" Content="Minimize Launcher On Play"/>
+
+                </StackPanel>
+                <Border Margin="0,20,0,10" DockPanel.Dock="Top" Padding="10,5">
+                    <Border.Background>
+                        <LinearGradientBrush>
+                            <GradientStop Color="#0000FF5D" Offset="0"/>
+                            <GradientStop Color="#FF00FFAE" Offset="0.5"/>
+                            <GradientStop Color="#0000A2FF" Offset="1"/>
+                        </LinearGradientBrush>
+                    </Border.Background>
+                    <TextBlock FontSize="24" FontWeight="Bold" Foreground="Black" HorizontalAlignment="Center" Text="Latest Changes"/>
+                </Border>
+                <TextBox Margin="10,0,10,10" Background="#FF303030" BorderBrush="#FF787878" Foreground="White"/>
+            </DockPanel>
+        </Border>
+    </Grid>
+</Page>
