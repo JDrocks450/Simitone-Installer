@@ -20,18 +20,37 @@ namespace Simitone.Installer.UI.Pages
     /// </summary>
     public partial class TransferScreen : Page
     {
-        Installer.Driver.InstallationManager Manager;
-        Sayonara.SayonaraClient Client;
+        private TransferPageCore.TransferContext context;
         public TransferScreen()
         {
             InitializeComponent();
-            Manager = new Driver.InstallationManager();            
+            var manager = new Driver.InstallationManager();
+            context = new TransferPageCore.TransferContext()
+            {
+                TS1InstallationPath = manager.Context.TS1InstallationPath,
+                TS1Installed = manager.Context.TS1Installed,
+            };
         }
 
         private void Page_Loaded(object sender, RoutedEventArgs e)
         {
-            (TransferPageFlyout.Content as TransferPageCore).Context = Manager.Context;
-            (TransferPageFlyout.Content as TransferPageCore).OnBack += TransferScreen_OnBack; ;
+            HostGrid.Children.Remove(TransferPageFlyout);            
+            (TransferPageFlyout.Content as TransferPageCore).OnBack += TransferScreen_OnBack;
+
+            (DiscoveryFlyout.Content as ServerDiscovery).OnBack += TransferScreen_OnBack;
+            (DiscoveryFlyout.Content as ServerDiscovery).OptionSelectedEvent += TransferScreen_OptionSelectedEvent;            
+        }
+
+        private void TransferScreen_OptionSelectedEvent(object sender, string IP, bool IsServer)
+        {
+            context.IP = IP;
+            context.IsServer = IsServer;
+            DiscoveryFlyout.Close((object s, EventArgs e) =>
+            {
+                HostGrid.Children.Remove(DiscoveryFlyout);
+                HostGrid.Children.Add(TransferPageFlyout);
+                (TransferPageFlyout.Content as TransferPageCore).Context = context;
+            });
         }
 
         private void TransferScreen_OnBack(object sender, EventArgs e)

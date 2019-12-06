@@ -27,20 +27,34 @@ namespace Simitone.Installer.UI.Pages
     /// </summary>
     public partial class TransferPageCore : Page, INotifyPropertyChanged
     {
+        public class TransferContext
+        {
+            public string TS1InstallationPath;
+            public bool TS1Installed;
+            public string IP;
+            public bool IsServer;
+        }
+
         public event EventHandler OnBack;
         Sayonara.SayonaraClient client;
-        private InstallationContext _context;
+        Sayonara.SayonaraServer server;
+        private TransferContext _context;
         private bool isUIupdating = false;
         Task installationTask;
+        private string _ip = null;
 
         public event PropertyChangedEventHandler PropertyChanged;
 
         public string URL
         {
-            get => client?.ConnectedURL ?? "Not Hosting";
-            set { }
+            get => _ip ?? ((Context?.IsServer ?? false) ? "Not Hosting" : "Not Connected");
+            set
+            {
+                _ip = value;
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("URL"));
+            }
         }
-        public Driver.InstallationContext Context
+        public TransferContext Context
         {
             get => _context;
             set
@@ -66,9 +80,25 @@ namespace Simitone.Installer.UI.Pages
 
         private void OnContextRecieved()
         {
+            ButtonStackPanel.IsEnabled = false;
             Sayonara.Out.DefaultOut.OnOutput += DefaultOut_OnOutput;
-            client = new Sayonara.SayonaraClient("http://localhost:37575");
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("URL"));
+            var ip = Context.IP ?? "localhost";
+            if (!Context.IsServer)
+            {
+                client = new Sayonara.SayonaraClient(ip);
+                URL = ip;
+            }
+            else
+            {
+                server = ServerFactory.HostLocalServer();
+                ButtonStackPanel.IsEnabled = true;
+                PauseButton.Visibility = Visibility.Collapsed;
+                BeginButton.Visibility = Visibility.Collapsed;
+                BackButton.IsEnabled = true; // only allow the backbutton to be pressed, since we are hosting a server.
+                if (!server.Hosting)
+                    return;
+                URL = new Uri(server.Address).Host;
+            }            
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("TS1Path"));
             if (!Context.TS1Installed)
             {
@@ -77,26 +107,43 @@ namespace Simitone.Installer.UI.Pages
                 OnBack?.Invoke(this, null);
                 return;
             }
-            DirectoryChooser.SelectedDirectory = TS1Path;            
+            DirectoryChooser.SelectedDirectory = TS1Path;
+            ButtonStackPanel.IsEnabled = true;
         }
 
         private void DefaultOut_OnOutput(Sayonara.Out.MODE outMode, Sayonara.Out.OnOutputEventArgs args)
         {
-            if (!isUIupdating)
-                ConsoleOut.Dispatcher.InvokeAsync(() =>
-                {
-                    isUIupdating = true;
-                    if (ConsoleOut != null)
+            if (outMode == Out.MODE.WRITELINE)
+            {
+                if (!isUIupdating)
+                    ConsoleOut.Dispatcher.InvokeAsync(() =>
                     {
-                        ConsoleOut.Text += args.Text + "\n";
-                        ConsoleViewer.ScrollToBottom();
-                    }
-                    isUIupdating = false;
-                });
+                        isUIupdating = true;
+                        if (ConsoleOut != null)
+                        {
+                            ConsoleOut.Text += args.Text + "\n";
+                            ConsoleViewer.ScrollToBottom();
+                        }
+                        isUIupdating = false;
+                    });
+            }
+            else
+            {
+                if (client != null)
+                    client.IsPaused = true;
+                var dialog = Dialog.ShowDialog("Transfer The Sims", args.Text, (DialogPage.CMsgBoxButtons)((int)args.Buttons));
+                dialog.DialogClosed += (DialogPage sender, bool ? result) => {
+                    if (client != null)
+                        client.IsPaused = false;
+                };
+            }
+
         }
 
         private void BeginButton_Click(object sender, RoutedEventArgs e)
         {
+            if (Context.IsServer)
+                return; // servers are not clients!
             TS1Path = DirectoryChooser.SelectedDirectory;
             if (installationTask == null)
             {
@@ -108,9 +155,9 @@ namespace Simitone.Installer.UI.Pages
                     {
                         w.Stop();
                         Out.PrintLine("Transfer completed in " + w.Elapsed.ToString());
-                        Dispatcher.Invoke(() => (sender as Button).Content = "Begin");
-                        
-                    });
+                        Dispatcher.Invoke(() => (sender as Button).Content = "Start");
+                        installationTask = null;
+                    });                    
                 }
                 catch (TaskCanceledException exec)
                 {
@@ -118,17 +165,16 @@ namespace Simitone.Installer.UI.Pages
                 }
                 catch (Exception exception)
                 {
-                    Dialog.ShowDialog("An Error Occurred...",
-                    "The follow error occurred: " + exception);
-                    (sender as Button).Content = "Begin";
+                    Dialog.ShowDialog("A Error Occurred...",
+                    "Try again in a little while.");
                     installationTask = null;
                 }
-                (sender as Button).Content = "Stop";
+                (sender as Button).Content = "Start";
             }
             else
             {
                 RegisterSafeExit(() => installationTask = null);
-                (sender as Button).Content = "Begin";
+                (sender as Button).Content = "Start";
             }
         }
 
@@ -147,7 +193,7 @@ namespace Simitone.Installer.UI.Pages
 
         private void BackButton_Click(object sender, RoutedEventArgs e)
         {
-            if (installationTask != null)
+            if (installationTask != null && !Context.IsServer)
             {
                 client.IsPaused = true;
                 var dialog = Dialog.ShowDialog("Transfer In Progress!",
@@ -163,9 +209,14 @@ namespace Simitone.Installer.UI.Pages
                             client.IsPaused = false;
                     }
                 };
+                return;
             }
-            else
-                OnBack?.Invoke(this, null);
+            else if (Context.IsServer)
+            {
+                server.Shutdown();
+            }
+            Out.DefaultOut.OnOutput -= DefaultOut_OnOutput;
+            OnBack?.Invoke(this, null);
         }
 
         private void PauseButton_Click(object sender, RoutedEventArgs e)

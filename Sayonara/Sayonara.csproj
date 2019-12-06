@@ -34,6 +34,9 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="BeaconLib, Version=1.0.2.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\rix0rrr.BeaconLib.1.0.2\lib\net40\BeaconLib.dll</HintPath>
+    </Reference>
     <Reference Include="Microsoft.Owin, Version=4.1.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.Owin.4.1.0\lib\net45\Microsoft.Owin.dll</HintPath>
     </Reference>
@@ -80,17 +83,19 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ConnectionsController.cs" />
-    <Compile Include="DirectoriesController.cs" />
-    <Compile Include="DownloadsController.cs" />
+    <Compile Include="Controllers\ConnectionsController.cs" />
+    <Compile Include="Controllers\DirectoriesController.cs" />
+    <Compile Include="DiscoveryHandler.cs" />
+    <Compile Include="Controllers\DownloadsController.cs" />
     <Compile Include="FileQueue.cs" />
-    <Compile Include="FilesController.cs" />
+    <Compile Include="Controllers\FilesController.cs" />
     <Compile Include="FileServerBuilder.cs" />
     <Compile Include="SayonaraClient.cs" />
     <Compile Include="SayonaraServer.cs" />
     <Compile Include="NetFileSystem.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="ServerFactory.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />

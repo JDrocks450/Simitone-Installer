@@ -1,0 +1,39 @@
+﻿<Button x:Class="Simitone.Installer.UI.Controls.SimitoneBorderButton"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:Simitone.Installer.UI.Controls"
+             mc:Ignorable="d" Name="Host"
+             d:DesignHeight="450" d:DesignWidth="800" Cursor="Hand" BorderBrush="White">
+    <Button.Template>
+        <ControlTemplate TargetType="Button">
+            <Grid Opacity="{TemplateBinding Opacity}">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="293*"/>
+                    <RowDefinition Height="158*"/>
+                </Grid.RowDefinitions>
+                <Viewbox>
+                    <Border BorderBrush="{TemplateBinding BorderBrush}" CornerRadius="15" BorderThickness="3" Height="60" Width="60">
+                        <Border BorderBrush="{TemplateBinding BorderBrush}" Margin="2" CornerRadius="11" BorderThickness="1">
+                            <ContentPresenter/>
+                        </Border>
+                    </Border>
+                </Viewbox>
+                <TextBlock Foreground="{TemplateBinding BorderBrush}" Grid.Row="1" Text="{Binding Text, ElementName=Host}" VerticalAlignment="Top" HorizontalAlignment="Center" FontFamily="Trebuchet MS" TextAlignment="Center" FontSize="20" TextWrapping="Wrap" FontWeight="Black"/>
+            </Grid>
+        </ControlTemplate>
+    </Button.Template>
+    <Button.Resources>
+        <Style TargetType="Button">
+            <Style.Triggers>
+                <Trigger Property="IsEnabled" Value="True">
+                    <Setter Property="Opacity" Value="1" />
+                </Trigger>
+                <Trigger Property="IsEnabled" Value="False">
+                    <Setter Property="Opacity" Value=".5" />
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+    </Button.Resources>
+</Button>

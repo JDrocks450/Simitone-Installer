@@ -67,10 +67,9 @@ namespace Sayonara
         static async Task Main(string[] args)
         {
             Out.DefaultOut.OnOutput += DefaultOut_OnOutput;
-            Console.WriteLine("What is my purpose? (S server C client doi fuck you huh how about that? yeah. that's right... pussy)");
-            //var response = Console.ReadKey();
+            Console.WriteLine("Sayonara Console");
             var fileSystem = new SayonaraServer();
-            var client = new SayonaraClient(fileSystem.Address);
+            var client = new SayonaraClient("localhost");
             Console.WriteLine("The Server is running...");
             var command = "";
             while (true)
@@ -108,8 +107,7 @@ namespace Sayonara
                 }
                 Console.WriteLine(msg);
                 Console.WriteLine(msg.Content.ReadAsStringAsync().Result);
-            }
-            Console.ReadKey();
+            }            
             fileSystem.Shutdown();
         }
 

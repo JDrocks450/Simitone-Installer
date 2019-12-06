@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Sayonara
 {
-    public class FileQueue : Queue<(string subpath, bool isDir, byte[] data)>, IDisposable
+    internal class FileQueue : Queue<(string subpath, bool isDir, byte[] data)>, IDisposable
     {
         /// <summary>
         /// When a directory is requested for creation, this is invoked to handle the file or directory creation.

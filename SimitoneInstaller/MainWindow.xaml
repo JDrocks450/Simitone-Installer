@@ -7,7 +7,7 @@
         xmlns:pages="clr-namespace:Simitone.Installer.UI.Pages"
         xmlns:controls="clr-namespace:Simitone.Installer.UI.Controls"
         mc:Ignorable="d"
-        Title="Simitone Installer" Height="470" Width="800" Background="Black" Foreground="White" WindowStyle="None" ResizeMode="NoResize">
+        Title="Simitone Installer" Height="505" Width="800" Background="Black" Foreground="White" WindowStyle="None" ResizeMode="NoResize">
     <Window.Template>
         <ControlTemplate TargetType="Window">
             <DockPanel Width="{TemplateBinding Width}" Background="{TemplateBinding Background}">

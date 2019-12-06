@@ -66,9 +66,10 @@ namespace Sayonara
             Task.Run(() => Connect(URL));
         }
 
-        public async Task<bool> Connect(string URL)
+        public async Task<bool> Connect(string IP)
         {
             Client = new HttpClient();
+            var URL = @"http://" + IP + ":" + SayonaraServer.PORT;
             Out.PrintLine("Sayonara Client started looking for: " + URL);
             Client.BaseAddress = new Uri(URL);
             ConnectedURL = URL;
@@ -86,29 +87,35 @@ namespace Sayonara
             CancellationToken = null;
         }
 
+        /// <summary>
+        /// Start the transfer of the installation to the selected directory.
+        /// </summary>
+        /// <param name="rootDirectory">The root directory where the installation will be placed</param>
+        /// <returns></returns>
         public async Task DownloadAsync(string rootDirectory)
         {
+            IsDownloading = true;
             fileQueue = new FileQueue();
             _ = Task.Run(() => fileQueue.StartListening(rootDirectory));
             await RequestDirectory("");
             fileQueue.Dispose();
             fileQueue = null;
+            IsDownloading = false;
         }
 
         /// <summary>
         /// Downloads a directory with all of it's child directories and files.
         /// </summary>
         /// <param name="subpath"></param>
-        private async Task<bool> RequestDirectory(string subpath)
+        private async Task<bool> RequestDirectory(string subpath) // this powers the loop of downloading the game
         {
-            IsDownloading = true;
             cancelToken.ThrowIfCancellationRequested();
             subpath = subpath.TrimStart('/');
             var content = new StringContent(subpath, Encoding.UTF8, "application/json");
-            if (Client.PostAsJsonAsync(ConnectedURL + "/api/directories", subpath).Result.IsSuccessStatusCode)
+            if (Client.PostAsJsonAsync(ConnectedURL + "/api/directories", subpath).Result.IsSuccessStatusCode) // switch the directory back to one we're downloading
             {
-                fileQueue.Enqueue((subpath, true, null));
-                var fileResponse = await Client.GetAsync(ConnectedURL + "/api/files");
+                fileQueue.Enqueue((subpath, true, null)); // filequeue creates files on a separate thread
+                var fileResponse = await Client.GetAsync(ConnectedURL + "/api/files"); // get a list of files in the dir
                 var files = await fileResponse.Content.ReadAsAsync<IEnumerable<string>>();
                 foreach (var file in files)
                 {
@@ -128,7 +135,7 @@ namespace Sayonara
                         fileQueue.Enqueue((Path.Combine(subpath, file), false, bytes));
                     });
                 }
-                var dirResponse = Client.GetAsync(ConnectedURL + "/api/directories").Result;
+                var dirResponse = Client.GetAsync(ConnectedURL + "/api/directories").Result; // get the directories in the current dir
                 var directories = await dirResponse.Content.ReadAsAsync<IEnumerable<string>>();
                 foreach (var dir in directories)
                 {
@@ -138,11 +145,10 @@ namespace Sayonara
                         cancelToken.ThrowIfCancellationRequested();
                         await Task.Delay(1000);
                     }
-                    if (!await RequestDirectory(subpath + "/" + dir))
-                        return false;
+                    if (!await RequestDirectory(subpath + "/" + dir)) // download that directory
+                        return false; // safe exit
                 }
-            }
-            IsDownloading = false;
+            }            
             return true;
         }        
 

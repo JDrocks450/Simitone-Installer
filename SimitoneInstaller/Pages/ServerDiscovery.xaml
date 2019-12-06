@@ -1,0 +1,29 @@
+﻿<Page x:Class="Simitone.Installer.UI.Pages.ServerDiscovery"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+      xmlns:local="clr-namespace:Simitone.Installer.UI.Pages"
+      xmlns:controls="clr-namespace:Simitone.Installer.UI.Controls"
+      mc:Ignorable="d" d:DesignWidth="800"
+      Title="ServerDiscovery" Foreground="White" Height="253">
+
+    <Grid>
+        <DockPanel>
+            <controls:HeaderControl DockPanel.Dock="Top" Margin="0,10,0,0">Transfer Discovery</controls:HeaderControl>
+            <UniformGrid Margin="10" DockPanel.Dock="Left" Rows="1" VerticalAlignment="Center">
+                <controls:SimitoneBorderButton x:Name="TransferButton" Width="105" Text="Transfer from This PC" Click="TransferButton_Click">
+                    <Image Source="pack://siteoforigin:,,,/Resources/host.png" Margin="0,0,0,0"/>
+                </controls:SimitoneBorderButton>
+                <controls:SimitoneBorderButton x:Name="AutoConnect" IsEnabled="False" Width="105" BorderBrush="Gray" Text="Auto Connect" Click="AutoConnect_Click" Background="#FFAC1B1B">
+                    <Image Margin="5" Source="pack://siteoforigin:,,,/Resources/download.png"/>
+                </controls:SimitoneBorderButton>
+                <controls:SimitoneBorderButton x:Name="DirectConnect" Width="105" Text="Direct Connect" Click="DirectConnect_Click"/>
+                <controls:SimitoneBorderButton x:Name="Back" Width="105" Text="Back" Click="Back_Click">
+                    <Image Margin="5" Source="pack://siteoforigin:,,,/Resources/exit.png"/>
+                </controls:SimitoneBorderButton>
+            </UniformGrid>
+        </DockPanel>
+        <Line Fill="#FF979797" Stroke="#FF858585" X1="100" X2="100" Y2="199" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="102,49,0,6" Height="198" StrokeThickness="3"/>
+    </Grid>
+</Page>

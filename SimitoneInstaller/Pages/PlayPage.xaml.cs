@@ -112,7 +112,7 @@ namespace Simitone.Installer.UI.Pages
                     "before. Clicking Force Update will allow you to install Simitone again.");
 
             }
-            var simitonePath = Properties.Settings.Default.SimitoneURI;
+            var simitonePath = System.IO.Path.Combine(Properties.Settings.Default.SimitoneURI, "Simitone.Windows.exe");
             if (string.IsNullOrWhiteSpace(API))
                 API = "DirectX";
             Properties.Settings.Default.Using3D = Using3D;
@@ -126,11 +126,13 @@ namespace Simitone.Installer.UI.Pages
                 showErrorDiag();
             }
 
-            ProcessStartInfo info = new ProcessStartInfo(
-            simitonePath,
-                (Using3D ? "-3d " : "") +
+            string verbs = (Using3D ? "-3d " : "") +
                 (IDE ? "-ide " : "") +
-                (API == "OpenGL" ? "-gl " : ""));
+                (API == "OpenGL" ? "-gl " : "");
+            ProcessStartInfo info = new ProcessStartInfo(
+            simitonePath, (verbs != "") ? verbs : null);
+            info.WorkingDirectory = Properties.Settings.Default.SimitoneURI;
+                
             var proc = Process.Start(info);
             if (proc != null && MinimizeOnPlay)
             {

@@ -4,12 +4,16 @@
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
       xmlns:local="clr-namespace:Simitone.Installer.UI.Pages"
+      xmlns:local1="clr-namespace:Simitone.Installer.UI.Controls"
       mc:Ignorable="d" 
-      d:DesignHeight="450" d:DesignWidth="800"
+      d:DesignHeight="450" d:DesignWidth="400"
       Title="PlayPageCore">
 
     <StackPanel VerticalAlignment="Center">
-        <Button x:Name="PlayButton" Height="85" Margin="0,0,0,10" Foreground="White" Click="PlayButton_Click">
+        <local1:SimitoneBorderButton Width="135" Margin="0,0,0,10" Text="Play" Click="PlayButton_Click">
+            <Image Source="pack://siteoforigin:,,,/Resources/simitone_T.png" Margin="5"/>
+        </local1:SimitoneBorderButton>
+        <Button x:Name="PlayButton" Visibility="Collapsed" Height="85" Margin="0,0,0,10" Foreground="White" Click="PlayButton_Click">
             <Button.Background>
                 <RadialGradientBrush Center="0.5,-0.1" GradientOrigin="0.5,0.2" RadiusY="1.2" RadiusX="0.8">
                     <RadialGradientBrush.RelativeTransform>
@@ -24,66 +28,24 @@
                     <GradientStop Color="#FF00FF8B"/>
                 </RadialGradientBrush>
             </Button.Background> Play</Button>
-        <Button x:Name="Update" Height="55" Margin="0,0,0,10" Foreground="White" Click="Update_Click">
-            <Button.Background>
-                <RadialGradientBrush Center="0.5,-0.1" GradientOrigin="0.5,0.2" RadiusY="1.2" RadiusX="0.8">
-                    <RadialGradientBrush.RelativeTransform>
-                        <TransformGroup>
-                            <ScaleTransform CenterY="0.5" CenterX="0.5"/>
-                            <SkewTransform CenterY="0.5" CenterX="0.5"/>
-                            <RotateTransform CenterY="0.5" CenterX="0.5"/>
-                            <TranslateTransform/>
-                        </TransformGroup>
-                    </RadialGradientBrush.RelativeTransform>
-                    <GradientStop Color="#FF207CFF"/>
-                    <GradientStop Color="#FF0041A0" Offset="1"/>
-                </RadialGradientBrush>
-            </Button.Background> Force Update</Button>
-        <Button x:Name="TransferButton" Height="55" Margin="0,0,0,10" Foreground="White" Click="TransferButton_Click" Content="Transfer Installation">
-            <Button.Background>
-                <RadialGradientBrush Center="0.5,-0.1" GradientOrigin="0.5,0.2" RadiusY="1.2" RadiusX="0.8">
-                    <RadialGradientBrush.RelativeTransform>
-                        <TransformGroup>
-                            <ScaleTransform CenterY="0.5" CenterX="0.5"/>
-                            <SkewTransform CenterY="0.5" CenterX="0.5"/>
-                            <RotateTransform CenterY="0.5" CenterX="0.5"/>
-                            <TranslateTransform/>
-                        </TransformGroup>
-                    </RadialGradientBrush.RelativeTransform>
-                    <GradientStop Color="#FFFFCE79"/>
-                    <GradientStop Color="#FFAC6D00" Offset="1"/>
-                </RadialGradientBrush>
-            </Button.Background>
-        </Button>
-        <Button x:Name="GitHubButton" Height="55" Margin="0,0,0,10" Foreground="#FF323232" Click="GitHubButton_Click">
-            <Button.Background>
-                <RadialGradientBrush Center="0.5,-0.1" GradientOrigin="0.5,0.2" RadiusY="1.2" RadiusX="0.8">
-                    <RadialGradientBrush.RelativeTransform>
-                        <TransformGroup>
-                            <ScaleTransform CenterY="0.5" CenterX="0.5"/>
-                            <SkewTransform CenterY="0.5" CenterX="0.5"/>
-                            <RotateTransform CenterY="0.5" CenterX="0.5"/>
-                            <TranslateTransform/>
-                        </TransformGroup>
-                    </RadialGradientBrush.RelativeTransform>
-                    <GradientStop Color="White" Offset="0.57"/>
-                    <GradientStop Color="Gray" Offset="1"/>
-                </RadialGradientBrush>
-            </Button.Background> Open GitHub</Button>
-        <Button x:Name="CloseButton" Height="55" Margin="0,0,0,10" Foreground="White" Click="CloseButton_Click">
-            <Button.Background>
-                <RadialGradientBrush Center="0.5,-0.1" GradientOrigin="0.5,0.2" RadiusY="1.2" RadiusX="0.8">
-                    <RadialGradientBrush.RelativeTransform>
-                        <TransformGroup>
-                            <ScaleTransform CenterY="0.5" CenterX="0.5"/>
-                            <SkewTransform CenterY="0.5" CenterX="0.5"/>
-                            <RotateTransform CenterY="0.5" CenterX="0.5"/>
-                            <TranslateTransform/>
-                        </TransformGroup>
-                    </RadialGradientBrush.RelativeTransform>
-                    <GradientStop Color="Gray"/>
-                    <GradientStop Color="#FF4F4F4F" Offset="1"/>
-                </RadialGradientBrush>
-            </Button.Background> Close</Button>
+        <UniformGrid Width="260" Rows="2" Columns="2" Height="242" Margin="70,0">
+            <UniformGrid.Resources>
+                <Style TargetType="local1:SimitoneBorderButton">
+                    <Setter Property="Height" Value="130"/>
+                </Style>
+            </UniformGrid.Resources>
+            <local1:SimitoneBorderButton x:Name="Update" Margin="0,0,0,10" Click="Update_Click" Text="Force Update">
+                <Image Margin="5" Source="pack://siteoforigin:,,,/Resources/download.png"/>
+            </local1:SimitoneBorderButton>
+            <local1:SimitoneBorderButton x:Name="TransferButton" Margin="0,0,0,10" Click="TransferButton_Click" Text="Transfer">
+                <Image Margin="6" Source="pack://siteoforigin:,,,/Resources/transfer.png"/>
+            </local1:SimitoneBorderButton>
+            <local1:SimitoneBorderButton x:Name="GitHubButton" Margin="0,0,0,10" Click="GitHubButton_Click" Text="GitHub">
+                <Image Margin="5" Source="pack://siteoforigin:,,,/Resources/github.png"/>
+            </local1:SimitoneBorderButton>
+            <local1:SimitoneBorderButton x:Name="CloseButton" Margin="0,0,0,10" Click="CloseButton_Click" Text="Close">
+                <Image Margin="5" Source="pack://siteoforigin:,,,/Resources/exit.png"/>
+            </local1:SimitoneBorderButton>
+        </UniformGrid>
     </StackPanel>
 </Page>

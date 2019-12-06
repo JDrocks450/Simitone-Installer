@@ -8,12 +8,12 @@ using System.Threading.Tasks;
 
 namespace Sayonara
 {
-    public class NetFileSystemContext
+    internal class NetFileSystemContext
     {
         public string directory = "";
         public PhysicalFileSystem fileSystem;
     }
-    public static class NetFileSystem
+    internal static class NetFileSystem
     {
         const int DirNotFoundErr = 101;
         const string TheSimsDir = @"D:\Games\The Sims Complete Collection";

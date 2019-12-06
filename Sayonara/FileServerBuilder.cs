@@ -10,7 +10,7 @@ using Owin;
 
 namespace Sayonara
 {
-    public class FileServerBuilder
+    internal class FileServerBuilder
     {
         public void Configuration(IAppBuilder appBuilder)
         {
