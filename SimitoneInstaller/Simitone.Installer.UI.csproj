@@ -235,9 +235,9 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Installer\Installer.csproj">
+    <ProjectReference Include="..\Installer\Simitone.Installer.csproj">
       <Project>{5adaa2bc-ebd7-4e45-9efa-f541dc99142e}</Project>
-      <Name>Installer</Name>
+      <Name>Simitone.Installer</Name>
     </ProjectReference>
     <ProjectReference Include="..\Sayonara\Sayonara.csproj">
       <Project>{8e1f2be5-11ae-4e66-a112-44d0a26b61cd}</Project>

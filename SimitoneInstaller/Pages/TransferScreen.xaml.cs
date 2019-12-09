@@ -27,8 +27,8 @@ namespace Simitone.Installer.UI.Pages
             var manager = new Driver.InstallationManager();
             context = new TransferPageCore.TransferContext()
             {
-                TS1InstallationPath = manager.Context.TS1InstallationPath,
-                TS1Installed = manager.Context.TS1Installed,
+                TS1InstallationPath = manager.InstallContext.TS1InstallationPath,
+                TS1Installed = manager.InstallContext.TS1Installed,
             };
         }
 

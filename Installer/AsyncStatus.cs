@@ -9,7 +9,8 @@ namespace Simitone.Installer.Driver
     public class AsyncStatus
     {
         public event EventHandler DataChanged;
-        public string Status {
+        public string Status
+        {
             get => _status;
             set
             {

@@ -23,12 +23,18 @@ namespace Sayonara
         public enum DIALOGBTNS
         {
             OK,
-            YESNO
-        }
+            YESNO,
+            YESNOCANCEL,
+        }        
         public class OnOutputEventArgs
         {
             public string Text;
             public DIALOGBTNS Buttons;
+            public enum RESULT
+            {
+                NO_RESULT, OK, YES, NO, CANCEL
+            }
+            public RESULT Result;
         }
         public delegate void OnOutputEventHandler(MODE outMode, OnOutputEventArgs args);
         public event OnOutputEventHandler OnOutput;
@@ -38,9 +44,11 @@ namespace Sayonara
             OnOutput?.Invoke(MODE.WRITELINE, new OnOutputEventArgs() { Text = text });
         }
 
-        public void Dialog(string text, DIALOGBTNS btns = DIALOGBTNS.OK)
+        public OnOutputEventArgs Dialog(string text, DIALOGBTNS btns = DIALOGBTNS.OK)
         {
-            OnOutput?.Invoke(MODE.DIALOG, new OnOutputEventArgs() { Text = text, Buttons = btns });
+            var e = new OnOutputEventArgs() { Text = text, Buttons = btns };
+            OnOutput?.Invoke(MODE.DIALOG, e);
+            return e;
         }
 
         /// <summary>
@@ -57,20 +65,35 @@ namespace Sayonara
         /// </summary>
         /// <param name="text"></param>
         /// <param name="btns"></param>
-        public static void ShowDialog(string text, DIALOGBTNS btns = DIALOGBTNS.OK)
+        public static OnOutputEventArgs ShowDialog(string text, DIALOGBTNS btns = DIALOGBTNS.OK)
         {
-            DefaultOut.Dialog(text, btns);
+            return DefaultOut.Dialog(text, btns);
         }
     }
     class Program
     {        
+        static void PrintSeparator()
+        {
+            Console.WriteLine("===================================");
+        }
         static async Task Main(string[] args)
         {
             Out.DefaultOut.OnOutput += DefaultOut_OnOutput;
-            Console.WriteLine("Sayonara Console");
-            var fileSystem = new SayonaraServer();
+            Console.WriteLine("Sayonara Console by bISQUICK (JDrocks450)");
+            PrintSeparator();
+            string installpath = null;
+            while (true)
+            {
+                Console.WriteLine("Where is The Sims installed?");
+                installpath = Console.ReadLine();
+                if (Out.ShowDialog(installpath + "... Is this OK", Out.DIALOGBTNS.YESNO).Result == Out.OnOutputEventArgs.RESULT.YES)
+                    break;
+            }
+            PrintSeparator();
+            var fileSystem = new SayonaraServer(installpath);
             var client = new SayonaraClient("localhost");
             Console.WriteLine("The Server is running...");
+            PrintSeparator();
             var command = "";
             while (true)
             {
@@ -107,18 +130,58 @@ namespace Sayonara
                 }
                 Console.WriteLine(msg);
                 Console.WriteLine(msg.Content.ReadAsStringAsync().Result);
+                PrintSeparator();
             }            
             fileSystem.Shutdown();
         }
 
         private static void DefaultOut_OnOutput(Out.MODE outMode, Out.OnOutputEventArgs args)
-        {
-            Console.WriteLine(args.Text);
+        {            
             if (outMode == Out.MODE.DIALOG)
             {
-                Console.WriteLine("??? (Y/N)");
-                _ = Console.ReadKey();
+                switch (args.Buttons)
+                {
+                    case Out.DIALOGBTNS.YESNO:
+                        while (true)
+                        {
+                            Console.WriteLine(args.Text + "? (Y/N)");
+                            var response = Console.ReadKey();
+                            if (char.ToLower(response.KeyChar) == 'y')
+                            {
+                                args.Result = Out.OnOutputEventArgs.RESULT.YES;
+                                break;
+                            }
+                            else if (char.ToLower(response.KeyChar) == 'n')
+                            {
+                                args.Result = Out.OnOutputEventArgs.RESULT.NO;
+                                break;
+                            }
+                            else
+                                Console.WriteLine(response.KeyChar + " is not a valid response.");
+                        }
+                        return;
+                    case Out.DIALOGBTNS.YESNOCANCEL:
+                        {
+                            Console.WriteLine(args.Text + "? (Y/N or Any Other Key to Cancel)");
+                            var response = Console.ReadKey();
+                            if (char.ToLower(response.KeyChar) == 'y')
+                                args.Result = Out.OnOutputEventArgs.RESULT.YES;
+                            else if (char.ToLower(response.KeyChar) == 'n')
+                                args.Result = Out.OnOutputEventArgs.RESULT.NO;
+                            else args.Result = Out.OnOutputEventArgs.RESULT.CANCEL;
+                        }
+                        return;
+                    case Out.DIALOGBTNS.OK:
+                        {
+                            Console.WriteLine(args.Text);
+                            Console.WriteLine("Press Any Key to Continue...");
+                        }
+                        return;
+                }                
+                
             }
+            else
+                Console.WriteLine(args.Text);
         }
     }    
 }

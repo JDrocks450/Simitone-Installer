@@ -1,27 +1,26 @@
 ﻿using Octokit;
 using Simitone.Installer.Driver.Util;
 using System;
-using System.Collections.Generic;
 using System.ComponentModel;
 using System.IO;
 using System.IO.Compression;
 using System.Linq;
 using System.Net;
-using System.Text;
+using System.Security.Principal;
 using System.Threading.Tasks;
 
 namespace Simitone.Installer.Driver
 {
     public class InstallationManager
     {
-        public bool HasErrors => Context.HasErrors;
-        public IInstallationMessage[] Warnings => Context.Warnings;
-        public InstallationContext Context { get; private set; }
+        public bool HasErrors => InstallContext.HasErrors;
+        public IInstallationMessage[] Warnings => InstallContext.Warnings;
+        public InstallationContext InstallContext { get; private set; }
         public AsyncStatus CurrentStatus { get; private set; }
 
         public InstallationManager()
         {
-            Context = InstallationContext.GetInstallationContext();
+            InstallContext = InstallationContext.GetInstallationContext();
             CurrentStatus = new AsyncStatus() { Status = "Waiting..." };
         }
 
@@ -32,29 +31,10 @@ namespace Simitone.Installer.Driver
 
         public async Task<bool> BeginInstallation()
         {
-            var dir = new DirectoryInfo(Context.SimitonePath);
-            if (dir.Exists && (dir.GetFiles().Length > 0 || dir.GetDirectories().Length > 0)) // selected directory has files
-                if (!Context.IgnoreSimitonePathHasFiles)
-                {
-                    Context.PushWarning("Directory Not Empty!", "The selected Simitone installation " +
-                        "path (" + Context.SimitonePath + ") is not empty. Please clear the directory of all files " +
-                        "or choose a new place to install Simitone.", MessageSeverity.High);
-                    return false;
-                }
-                else
-                {
-                    try
-                    {
-                        dir.Delete(true);
-                    }
-                    catch (Exception)
-                    {
-                        Context.PushWarning("Couldn't Delete Directory!", "The selected Simitone installation " +
-                           "path (" + Context.SimitonePath + ") is not empty, and it could not be cleared automatically. Try reopening " +
-                           "the installer with Admin rights, or else clear the directory manually.", MessageSeverity.High);
-                        return false;
-                    }
-                }
+            var dir = new DirectoryInfo(InstallContext.SimitonePath);
+            using (var f = File.Create(Path.Combine(dir.FullName, "test.txt"))) { } // test directory access
+            File.Delete(Path.Combine(dir.FullName, "test.txt"));
+            AppDomain.CurrentDomain.SetPrincipalPolicy(PrincipalPolicy.WindowsPrincipal);
             var extractionPath = "simitone.zip";
             var result = await SimitoneDownload(extractionPath);
             if (!result)
@@ -62,19 +42,37 @@ namespace Simitone.Installer.Driver
             result = ExtractSimitone(extractionPath);
             return true;
         }
-
+        
         private bool ExtractSimitone(string path)
         {
-            CurrentStatus.Percent = 0;
-            SetStatus("Extracting Simitone to: " + Context.SimitonePath);
-            ZipFile.ExtractToDirectory(path, Context.SimitonePath);
+            CurrentStatus.Percent = 0;            
+            var basePath = InstallContext.SimitonePath;
+            int count = 0;            
+            using (var a = ZipFile.OpenRead(path))
+            {
+                a.Entries.Where(o => o.Name == string.Empty && !Directory.Exists(Path.Combine(basePath, o.FullName))).ToList()
+                    .ForEach(o =>
+                    {
+                        var createPath = Path.Combine(basePath, o.FullName);
+                        Directory.CreateDirectory(createPath);
+                    });
+                a.Entries.Where(o => o.Name != string.Empty).ToList()
+                    .ForEach(e =>
+                    {
+                        var createPath = Path.Combine(basePath, e.FullName);
+                        e.ExtractToFile(createPath, true);
+                        SetStatus("Extracting: " + createPath);
+                        count++;
+                        CurrentStatus.Percent = (int)((count / (double)a.Entries.Count) * 100);                        
+                    });
+            }
             CurrentStatus.Percent = 100;
             SetStatus("Installation Completed");
             return true;
         }
 
         private async Task<bool> SimitoneDownload(string saveTo)
-        {            
+        {
             SetStatus("Finding Latest Version...");
             string url = await FindSimitoneReleaseUrl();
             if (url == null)

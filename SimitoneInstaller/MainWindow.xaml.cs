@@ -32,6 +32,12 @@ namespace Simitone.Installer.UI
         {
             InitializeComponent();
             InstallerWindow = this;
+            AppDomain.CurrentDomain.UnhandledException += CurrentDomain_UnhandledException;
+        }
+
+        private void CurrentDomain_UnhandledException(object sender, UnhandledExceptionEventArgs e)
+        {
+            Dialog.ShowDialog("A Wild Exception Appears", e.ToString());
         }
 
         public static void ShowDialog(Dialog dialog)

@@ -90,14 +90,9 @@ namespace Simitone.Installer.UI.Pages
             }
             else
             {
-                server = ServerFactory.HostLocalServer();
                 ButtonStackPanel.IsEnabled = true;
-                PauseButton.Visibility = Visibility.Collapsed;
-                BeginButton.Visibility = Visibility.Collapsed;
-                BackButton.IsEnabled = true; // only allow the backbutton to be pressed, since we are hosting a server.
-                if (!server.Hosting)
-                    return;
-                URL = new Uri(server.Address).Host;
+                PauseButton.Visibility = Visibility.Collapsed; // server cannot be paused.                
+                BackButton.IsEnabled = true;                
             }            
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("TS1Path"));
             if (!Context.TS1Installed)
@@ -141,10 +136,18 @@ namespace Simitone.Installer.UI.Pages
         }
 
         private void BeginButton_Click(object sender, RoutedEventArgs e)
-        {
-            if (Context.IsServer)
-                return; // servers are not clients!
+        {            
             TS1Path = DirectoryChooser.SelectedDirectory;
+            if (Context.IsServer)
+            {
+                server = SayonaraServer.HostLocalServer(TS1Path);
+                if (!server.Hosting)
+                    return;
+                URL = new Uri(server.Address).Host;
+                BeginButton.Visibility = Visibility.Collapsed;
+                BackButton.Content = "Stop Server and Go Back";
+                return;
+            }
             if (installationTask == null)
             {
                 try

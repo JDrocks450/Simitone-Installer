@@ -12,11 +12,22 @@ namespace Sayonara
 {
     internal class FileServerBuilder
     {
+        /// <summary>
+        /// Set before Webapp is started to set the root of the transfer.
+        /// </summary>
+        public static string RootDir
+        {
+            get; set;
+        } = null;
         public void Configuration(IAppBuilder appBuilder)
         {
-            var physicalFileSystem = new PhysicalFileSystem(@"D:\Games\The Sims Complete Collection");
-            var options = new FileServerOptions
+            if (RootDir == null)
             {
+                throw new Exception("RootDir was not set!");
+            }
+            var physicalFileSystem = new PhysicalFileSystem(RootDir);
+            var options = new FileServerOptions
+            {                
                 EnableDirectoryBrowsing = true,
                 EnableDefaultFiles = true,
                 FileSystem = physicalFileSystem,

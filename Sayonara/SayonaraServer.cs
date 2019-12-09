@@ -28,17 +28,24 @@ namespace Sayonara
             get;
             private set;
         } = false;
-        public SayonaraServer(string IP = "localhost", int port = PORT)
+        /// <summary>
+        /// Creates a SayonaraServer instance
+        /// </summary>
+        /// <param name="transferRootDirectory">The directory to transfer</param>
+        /// <param name="IP">The IP to host on</param>
+        /// <param name="port">The port to listen to, this should only be <see cref="PORT"/>!</param>
+        public SayonaraServer(string transferRootDirectory = null, string IP = "localhost", int port = PORT)
         {
             var address = @"http://" + IP + ":" + port + "/";
             try
             {
+                FileServerBuilder.RootDir = transferRootDirectory;
                 Server = WebApp.Start<FileServerBuilder>(address);
             }
             catch (Exception e)
             {
                 Out.PrintLine(e.ToString());
-                Out.ShowDialog("The Server could not be started! Please try again in a little while.");
+                Out.ShowDialog("The Server could not be started! Try running with admin rights.");
                 return;
             }
             Address = address;
@@ -47,17 +54,21 @@ namespace Sayonara
             SetupDiscovery();
         }
         /// <summary>
-        /// Gets a Server instance on the local IP address
+        /// Creates a <see cref="SayonaraServer"/> instance over LAN
         /// </summary>
         /// <returns></returns>
-        public static SayonaraServer HostLocalServer()
+        public static SayonaraServer HostLocalServer(string rootDir)
         {
             var ip = GetLocalIP();
             if (ip == null)
-                return null;
-            return new SayonaraServer(ip);
+                throw new Exception("This computer is not connected to the internet.");
+            return new SayonaraServer(rootDir, ip);
         }
 
+        /// <summary>
+        /// Gets the IP of this machine on the LAN.
+        /// </summary>
+        /// <returns></returns>
         public static string GetLocalIP()
         {
             string localIP = null;
@@ -90,11 +101,17 @@ namespace Sayonara
                 serverBeacon.Start();
         }
 
+        /// <summary>
+        /// Make this server no longer discoverable.
+        /// </summary>
         private void StopDiscovery() // this should be called when the download starts, not when a user connects
         {
             serverBeacon?.Stop();
         }
         
+        /// <summary>
+        /// Cleanly shuts down the server
+        /// </summary>
         public void Shutdown()
         {
             Out.PrintLine("Sayonara is no longer hosting...");

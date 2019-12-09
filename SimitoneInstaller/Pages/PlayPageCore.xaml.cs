@@ -48,7 +48,8 @@ namespace Simitone.Installer.UI.Pages
 
         private void CloseButton_Click(object sender, RoutedEventArgs e)
         {
-            Environment.Exit(0);
+            Application.Current.MainWindow.WindowStyle = WindowStyle.SingleBorderWindow;
+            Application.Current.Shutdown();
         }
     }
 }

@@ -5,7 +5,7 @@ VisualStudioVersion = 16.0.28803.452
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Simitone.Installer.UI", "SimitoneInstaller\Simitone.Installer.UI.csproj", "{4E5A019F-AED8-4122-8AC4-01595BA1B422}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Installer", "Installer\Installer.csproj", "{5ADAA2BC-EBD7-4E45-9EFA-F541DC99142E}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Simitone.Installer", "Installer\Simitone.Installer.csproj", "{5ADAA2BC-EBD7-4E45-9EFA-F541DC99142E}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sayonara", "Sayonara\Sayonara.csproj", "{8E1F2BE5-11AE-4E66-A112-44D0A26B61CD}"
 EndProject
