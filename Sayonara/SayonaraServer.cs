@@ -40,6 +40,7 @@ namespace Sayonara
             try
             {
                 FileServerBuilder.RootDir = transferRootDirectory;
+                Address = address;
                 Server = WebApp.Start<FileServerBuilder>(address);
             }
             catch (Exception e)
@@ -47,8 +48,7 @@ namespace Sayonara
                 Out.PrintLine(e.ToString());
                 Out.ShowDialog("The Server could not be started! Try running with admin rights.");
                 return;
-            }
-            Address = address;
+            }            
             Hosting = true;
             Out.PrintLine("Sayonara is hosting at address: " + address);
             SetupDiscovery();
@@ -63,6 +63,11 @@ namespace Sayonara
             if (ip == null)
                 throw new Exception("This computer is not connected to the internet.");
             return new SayonaraServer(rootDir, ip);
+        }
+
+        public static string GetExternIP()
+        {
+            return new System.Net.WebClient().DownloadString("https://api.ipify.org");
         }
 
         /// <summary>

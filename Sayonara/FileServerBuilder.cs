@@ -46,7 +46,7 @@ namespace Sayonara
 
             appBuilder.UseFileServer(options);
 
-            HttpConfiguration config = new HttpConfiguration();
+            HttpConfiguration config = new HttpConfiguration() { };
             config.Routes.MapHttpRoute(
                 name: "SayonaraTransferApi",
                 routeTemplate: "api/{controller}/{name}", //command format

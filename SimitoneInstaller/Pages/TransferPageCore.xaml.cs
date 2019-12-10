@@ -141,9 +141,9 @@ namespace Simitone.Installer.UI.Pages
             if (Context.IsServer)
             {
                 server = SayonaraServer.HostLocalServer(TS1Path);
-                if (!server.Hosting)
-                    return;
                 URL = new Uri(server.Address).Host;
+                if (!server.Hosting)
+                    return;                
                 BeginButton.Visibility = Visibility.Collapsed;
                 BackButton.Content = "Stop Server and Go Back";
                 return;
