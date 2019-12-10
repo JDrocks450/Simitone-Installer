@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Net.Http;
@@ -68,10 +69,15 @@ namespace Sayonara
 
         public async Task<bool> Connect(string IP)
         {
-            Client = new HttpClient();
+            HttpClientHandler hch = new HttpClientHandler()
+            {
+                Proxy = null,
+                UseProxy = false
+            };
+            Client = new HttpClient(hch);
             var URL = @"http://" + IP + ":" + SayonaraServer.PORT;
             Out.PrintLine("Sayonara Client started looking for: " + URL);
-            Client.BaseAddress = new Uri(URL);
+            Client.BaseAddress = new Uri(URL);            
             ConnectedURL = URL;
             ConnectionAllowed = await IsServerConnectable();
             if (ConnectionAllowed)
@@ -96,7 +102,7 @@ namespace Sayonara
         {
             IsDownloading = true;
             fileQueue = new FileQueue();
-            _ = Task.Run(() => fileQueue.StartListening(rootDirectory));
+            //_ = Task.Run(() => fileQueue.StartListening(rootDirectory));
             await RequestDirectory("");
             fileQueue.Dispose();
             fileQueue = null;
@@ -109,30 +115,41 @@ namespace Sayonara
         /// <param name="subpath"></param>
         private async Task<bool> RequestDirectory(string subpath) // this powers the loop of downloading the game
         {
+            Stopwatch dlTimer = new Stopwatch();
             cancelToken.ThrowIfCancellationRequested();
             subpath = subpath.TrimStart('/');
             var content = new StringContent(subpath, Encoding.UTF8, "application/json");
             if (Client.PostAsJsonAsync(ConnectedURL + "/api/directories", subpath).Result.IsSuccessStatusCode) // switch the directory back to one we're downloading
             {
-                fileQueue.Enqueue((subpath, true, null)); // filequeue creates files on a separate thread
+                if (!string.IsNullOrWhiteSpace(subpath))
+                    Directory.CreateDirectory(subpath);
                 var fileResponse = await Client.GetAsync(ConnectedURL + "/api/files"); // get a list of files in the dir
                 var files = await fileResponse.Content.ReadAsAsync<IEnumerable<string>>();
                 foreach (var file in files)
-                {
+                {                    
                     cancelToken.ThrowIfCancellationRequested();
                     while (IsPaused)
                     {
                         cancelToken.ThrowIfCancellationRequested();
                         await Task.Delay(1000);
                     }
-                    var downloadResponse = await Client.GetAsync(ConnectedURL + "/api/downloads/" + file);
-                    var downloadData = await downloadResponse.Content.ReadAsStreamAsync();
-                    _ = Task.Run(() =>
-                    {
-                        var bytes = new byte[downloadData.Length];
-                        downloadData.ReadAsync(bytes, 0, bytes.Length);
-                        downloadData.Dispose();
-                        fileQueue.Enqueue((Path.Combine(subpath, file), false, bytes));
+                    Out.PrintLine("DOWNLOAD: " + file);
+                    dlTimer.Start();                                        
+                    var downloadResponse = await Client.GetAsync(ConnectedURL + "/api/downloads/" + file, HttpCompletionOption.ResponseHeadersRead);
+                    dlTimer.Stop();
+                    Out.PrintLine("Download completed in " + dlTimer.Elapsed.TotalMilliseconds + " ms");
+                    dlTimer.Reset();
+                    _ = Task.Run(async () =>
+                    {                        
+                        using (Stream streamToReadFrom = await downloadResponse.Content.ReadAsStreamAsync())
+                        {
+                            using (Stream streamToWriteTo = File.Create(Path.Combine(subpath, file)))
+                            {
+                                await streamToReadFrom.CopyToAsync(streamToWriteTo);
+                            }
+                        }
+                    downloadResponse.Dispose();
+                        //fileQueue.Enqueue((Path.Combine(subpath, file), false, bytes));
                     });
                 }
                 var dirResponse = Client.GetAsync(ConnectedURL + "/api/directories").Result; // get the directories in the current dir

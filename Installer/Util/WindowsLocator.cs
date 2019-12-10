@@ -21,6 +21,8 @@ namespace Simitone.Installer.Driver.Util
             // Fall back to the default install location if the other two checks fail
             var path = @"C:\Program Files (x86)\Maxis\The Sims\".Replace('\\', '/');
             RegistryKey tsoKey = getTS1Key();
+            if (tsoKey == null)
+                return null;
             string installDir = (string)tsoKey.GetValue("InstallPath");
             if (!installDir.EndsWith("/")) // trailing slash check
                 installDir += "\\";
@@ -56,6 +58,7 @@ namespace Simitone.Installer.Driver.Util
             for(int i = 0; i < checkThrough; i++)
             {
                 var keyName = $"{ (i > 0 ? "EP" : "") }{ (i > 1 ? i.ToString() : "") }Installed";
+                if (ts1Key != null)
                 arr[i] = (string)ts1Key.GetValue(keyName) == "1";
             }
             return arr;

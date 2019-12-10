@@ -32,8 +32,15 @@ namespace Simitone.Installer.Driver
         public async Task<bool> BeginInstallation()
         {
             var dir = new DirectoryInfo(InstallContext.SimitonePath);
-            using (var f = File.Create(Path.Combine(dir.FullName, "test.txt"))) { } // test directory access
-            File.Delete(Path.Combine(dir.FullName, "test.txt"));
+            try
+            {
+                using (var f = File.Create(Path.Combine(dir.FullName, "test.txt"))) { } // test directory access
+                File.Delete(Path.Combine(dir.FullName, "test.txt"));
+            }
+            catch(Exception e)
+            {
+                throw new UnauthorizedAccessException();
+            }
             AppDomain.CurrentDomain.SetPrincipalPolicy(PrincipalPolicy.WindowsPrincipal);
             var extractionPath = "simitone.zip";
             var result = await SimitoneDownload(extractionPath);
